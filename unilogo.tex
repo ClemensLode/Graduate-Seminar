@@ -1,0 +1,169 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     Erzeugung des Uni-Logos in LaTeX                                 %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     TeX-\input-Member:      RZ.MACROS.TEX(UNILOGO)                   %
+%     Autor:                  Harald Meyer, Programmierauskunft RZ     %
+%     Stand:                  Dezember 88                              %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     Ueber die Anweisung "\input unilogo"  werden die in diesem       %
+%     Member folgenden Macros zur TeX-Laufzeit dynamisch in Ihre       %
+%     TeX-Eingabetexte eingefuegt.  Danach kann ein Uni-Logo mit       %
+%     dem Aufruf  "\unilogo{<n>}" erzeugt werden.  <n> ist dabei       %
+%     die Groesse des Logos in Millimetern. Beispiel:                  %
+%                                                                      %
+%     \unilogo{5}    % erzeuge ein 5 mm hohes Logo                     %
+%     \unilogo{25.4} % erzeuge ein 1 inch hohes Logo                   %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     Reservierte Namen:                                               %
+%     \ulooldlength, \ulonewlength ( Laengenangaben )                  %
+%     \unilogo, \uloh, \ulov, \ulofh, \ulofv ( LaTeX-Macros )          %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+ \message{Es werden einige Macros fuer das Uni-Logo definiert:}
+ \message{-}
+ 
+% Zunaechst werden zwei "length commands" definiert:
+\newlength{\ulooldlength} % rettet den alten \unitlength-wert
+\newlength{\ulonewlength} % \unitlength-wert waehrend \unilogo
+ 
+% \uloh ist ein Macro zum Zeichnen eines waagrechten Strichs:
+\newcommand{\uloh}[2]{%
+           % Argument 1 = Startpunkt des horizontalen Strichs
+           % Argument 2 = Laenge in \ulonewlength
+           \put(#1){\line(1,0){#2}}}
+           \message{Macro  uloh  definiert}
+ 
+% \ulov ist ein Macro zum Zeichnen eines senkrechten Strichs:
+\newcommand{\ulov}[2]{%
+           % Argument 1 = Startpunkt des vertikalen Strichs
+           % Argument 2 = Laenge
+           \put(#1){\line(0,1){#2}}}
+           \message{Macro  ulov  definiert}
+ 
+% \ulofh ist ein Macro zum Zeichnen eines waagrechten Balkens:
+\newcommand{\ulofh}[2]{%
+           % Argument 1 = startpunkt des horizontalen rule
+           % Argument 2 = laenge
+           \put(#1){\framebox(#2,1){%
+                    \rule{#2 \ulonewlength}{1.0\ulonewlength}}}}
+           \message{Macro  ulofh  definiert}
+ 
+% \ulofv ist ein Macro zum Zeichnen eines senkrechten Balkens:
+\newcommand{\ulofv}[2]{%
+           % Argument 1 = startpunkt der vertikalen rule
+           % Argument 2 = laenge
+           \put(#1){\framebox(1,#2){%
+                    \rule{1.0\ulonewlength}{#2 \ulonewlength}}}}
+           \message{Macro  ulofv  definiert}
+%
+%
+% \unilogo ist das eigentliche Macro
+\newcommand{\unilogo}[1]{%
+ % sichere den alten \unitlength-Wert in \ulooldlength (wird fuer
+ % spaeter aufgehoben und am Ende des Macros wieder eingestellt).
+ \setlength{\ulooldlength}{\unitlength}%
+ \setlength{\ulonewlength}{#1 true mm}%
+ \setlength{\ulonewlength}{0.0208333321\ulonewlength}%
+ \message{-}%
+ \message{TeX-Macro unilogo << begin >>}%
+ \message{unilogo : Das Logo wird #1 Millimeter breit und hoch}%
+ \mbox{%
+ \typeout{unilogo : alte unitlength \number\unitlength }%
+ \setlength{\unitlength}{\ulonewlength}%
+ \typeout{unilogo : neue unitlength \number\unitlength }%
+ \begin{picture}(48,48)(0,0)
+ \thinlines
+ % bei kleinen Logo-Durchmessern werden die hellen Flaechen innen leer
+ % gelassen, bei groesseren werden sie mit Gittermustern gefuellt.
+ \ifnum #1 > 15  % ggf. muss der Wert 15 (mm) angepasst werden
+   \message{unilogo : Helle Flaechen werden mit Hatches gefuellt}
+   \uloh{0,34}{48}  \uloh{1,35}{46}  \uloh{2,36}{44}  \uloh{3,37}{42}
+   \uloh{4,38}{40}  \uloh{5,39}{38}  \uloh{6,40}{36}  \uloh{7,41}{34}
+   \uloh{8,42}{32}  \uloh{9,43}{30}  \uloh{10,44}{28} \uloh{11,45}{26}
+   \uloh{12,46}{24} \uloh{13,47}{22} \uloh{14,48}{20} \uloh{0,14}{14}
+   \uloh{0,15}{14}  \uloh{0,16}{14}  \uloh{0,17}{14}  \uloh{0,18}{14}
+   \uloh{0,19}{14}  \uloh{0,20}{14}  \uloh{0,21}{14}  \uloh{0,22}{14}
+   \uloh{0,23}{14}  \uloh{0,24}{14}  \uloh{0,25}{14}  \uloh{0,26}{14}
+   \uloh{0,27}{14}  \uloh{0,28}{14}  \uloh{0,29}{14}  \uloh{0,30}{14}
+   \uloh{0,31}{14}  \uloh{0,32}{14}  \uloh{0,33}{14}  \uloh{0,34}{14}
+   \uloh{34,14}{14} \uloh{34,15}{14} \uloh{34,16}{14} \uloh{34,17}{14}
+   \uloh{34,18}{14} \uloh{34,19}{14} \uloh{34,20}{14} \uloh{34,21}{14}
+   \uloh{34,22}{14} \uloh{34,23}{14} \uloh{34,24}{14} \uloh{34,25}{14}
+   \uloh{34,26}{14} \uloh{34,27}{14} \uloh{34,28}{14} \uloh{34,29}{14}
+   \uloh{34,30}{14} \uloh{34,31}{14} \uloh{34,32}{14} \uloh{34,33}{14}
+   \uloh{34,34}{14} \uloh{0,14}{48}  \uloh{1,13}{46}  \uloh{2,12}{44}
+   \uloh{3,11}{42}  \uloh{4,10}{40}  \uloh{5,9}{38}   \uloh{6,8}{36}
+   \uloh{7,7}{34}   \uloh{8,6}{32}   \uloh{9,5}{30}   \uloh{10,4}{28}
+   \uloh{11,3}{26}  \uloh{12,2}{24}  \uloh{13,1}{22}  \uloh{14,0}{20}
+   \ulov{0,14}{20}  \ulov{1,13}{22}  \ulov{2,12}{24}  \ulov{3,11}{26}
+   \ulov{4,10}{28}  \ulov{5,9}{30}   \ulov{6,8}{32}   \ulov{7,7}{34}
+   \ulov{8,6}{36}   \ulov{9,5}{38}   \ulov{10,4}{40}  \ulov{11,3}{42}
+   \ulov{12,2}{44}  \ulov{13,1}{46}  \ulov{14,0}{48}  \ulov{14,34}{14}
+   \ulov{15,34}{14} \ulov{16,34}{14} \ulov{17,34}{14} \ulov{18,34}{14}
+   \ulov{19,34}{14} \ulov{20,34}{14} \ulov{21,34}{14} \ulov{22,34}{14}
+   \ulov{23,34}{14} \ulov{24,34}{14} \ulov{25,34}{14} \ulov{26,34}{14}
+   \ulov{27,34}{14} \ulov{28,34}{14} \ulov{29,34}{14} \ulov{30,34}{14}
+   \ulov{31,34}{14} \ulov{32,34}{14} \ulov{33,34}{14} \ulov{34,34}{14}
+   \ulov{14,0}{14}  \ulov{15,0}{14}  \ulov{16,0}{14}  \ulov{17,0}{14}
+   \ulov{18,0}{14}  \ulov{19,0}{14}  \ulov{20,0}{14}  \ulov{21,0}{14}
+   \ulov{22,0}{14}  \ulov{23,0}{14}  \ulov{24,0}{14}  \ulov{25,0}{14}
+   \ulov{26,0}{14}  \ulov{27,0}{14}  \ulov{28,0}{14}  \ulov{29,0}{14}
+   \ulov{30,0}{14}  \ulov{31,0}{14}  \ulov{32,0}{14}  \ulov{33,0}{14}
+   \ulov{34,0}{14}  \ulov{34,0}{48}  \ulov{35,1}{46}  \ulov{36,2}{44}
+   \ulov{37,3}{42}  \ulov{38,4}{40}  \ulov{39,5}{38}  \ulov{40,6}{36}
+   \ulov{41,7}{34}  \ulov{42,8}{32}  \ulov{43,9}{30}  \ulov{44,10}{28}
+   \ulov{45,11}{26} \ulov{46,12}{24} \ulov{47,13}{22} \ulov{48,14}{20}
+ \else
+   \message{unilogo : Helle Flaechen bleiben leer}
+ \fi
+ \message{unilogo : Plotten der Aussenschraegen}
+ \put(0,34){\line(1,1){14}}
+ \put(34,48){\line(1,-1){14}}
+ \put(0,14){\line(1,-1){14}}
+ \put(34,0){\line(1,1){14}}
+ \message{unilogo : Plotten der horizontalen und vertikalen Randlinien}
+ \put(14,14){\framebox(20,20){}}
+ \message{unilogo : Fuellen des Inneren der dunklen Gebiete}
+ \ulofh{13,34}{21} \ulofh{12,35}{23} \ulofh{11,36}{25} \ulofh{10,37}{27}
+ \ulofh{9,38}{29}  \ulofh{8,39}{31}  \ulofh{7,40}{33}  \ulofh{14,0}{20}
+ \ulofh{13,1}{22}  \ulofh{12,2}{24}  \ulofh{11,3}{26}  \ulofh{10,4}{28}
+ \ulofh{9,5}{30}   \ulofh{8,6}{32}   \ulofv{13,14}{20} \ulofv{12,13}{22}
+ \ulofv{11,12}{24} \ulofv{10,11}{26} \ulofv{9,10}{28}  \ulofv{8,9}{30}
+ \ulofv{7,8}{32}   \ulofv{47,14}{20} \ulofv{46,13}{22} \ulofv{45,12}{24}
+ \ulofv{44,11}{26} \ulofv{43,10}{28} \ulofv{42,9}{30}  \ulofv{41,8}{32}
+ \message{unilogo : Ausspachteln der Raender der dunklen Gebiete}
+ \multiput(7,7)(0.0,0.10){10}{\line(1,1){7}}
+ \multiput(34,34)(-0.10,0.0){10}{\line(1,1){7}}
+ \multiput(7,7)(0.10,0.0){10}{\line(1,-1){7}}
+ \multiput(34,0)(-0.10,0.0){10}{\line(1,1){7}}
+ \multiput(41,7)(0.0,0.10){10}{\line(1,1){7}}
+ \multiput(41,41)(0.0,-0.10){10}{\line(1,-1){7}}
+ \message{unilogo : Verstaerkung der Randlinien}
+ \thicklines
+ \put(14,0){\line(1,0){20}}
+ \put(34,0){\line(1,1){14}}
+ \put(48,14){\line(0,1){20}}
+ \put(48,34){\line(-1,1){14}}
+ \put(34,48){\line(-1,0){20}}
+ \put(14,48){\line(-1,-1){14}}
+ \put(0,34){\line(0,-1){20}}
+ \put(0,14){\line(1,-1){14}}
+ \thinlines
+ \end{picture}%
+ \typeout{unilogo : alte unitlength \number\unitlength }%
+ \setlength{\unitlength}{\ulooldlength}%
+ \typeout{unilogo : neue unitlength \number\unitlength }%
+ }% auch ende der mbox
+ %
+ \message{TeX-Macro unilogo << end >>}%
+ \message{-}%
+ }% ende des Macros
+%

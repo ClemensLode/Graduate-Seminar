@@ -1,0 +1,172 @@
+{\ttfamily \raggedright \small
+\ \ \ \ \ \ printf("{}\%i"{},\ array[j+i$\ast$length]);\\
+\ \ \ \ if(i\ !=\ size-{}1)\\
+\ \ \ \ \ \ printf("{},\ "{});\\
+\ \ \ \ else\ printf("{}$\backslash$n"{});\\
+\ \ \}\\
+\}\\
+\ \\
+void\ mutiere(int$\ast$\ array,\ int\ length)\\
+\{\\
+\ \ for(int\ i\ =\ 0;\ i\ <{}\ 10;\ i++)\\
+\ \ \{\\
+\ \ int\ punktmutation\ =\ rand()\%length;\\
+\ \ int\ wert\ =\ array[punktmutation];\\
+\ \ if(wert\ ==\ 0)\\
+\ \ \ \ array[punktmutation]\ =\ 1;\\
+\ \ else\ array[punktmutation]\ =\ 0;\\
+\ \ \}\\
+\}\\
+\ \\
+int\ fitness\underline\ funktion(int\ a,\ int\ b)\\
+\{\\
+\ \ if((a\ ==\ 0)\ \&\&\ (b\ ==\ 0))\\
+\ \ \ \ return\ 0;\\
+\ \ else\ \\
+\ \ if((a\ ==\ 1)\ \&\&\ (b\ ==\ 0))\\
+\ \ \ \ return\ 1;\\
+\ \ else\\
+\ \ if((a\ ==\ 0)\ \&\&\ (b\ ==\ 1))\\
+\ \ \ \ return\ 1;\\
+\ \ else\\
+\ \ if((a\ ==\ 1)\ \&\&\ (b\ ==\ 1))\\
+\ \ \ \ return\ -{}1;\\
+\}\\
+\ \\
+int\ main()\\
+\{\\
+\ \ srand(time(NULL));\\
+\ \ int\ fremde\underline\ antigene[FREMDE\underline\ ANTIGENE][LAENGE];\\
+\ \ int\ eigene\underline\ antigene[EIGENE\underline\ ANTIGENE][LAENGE];\\
+\ \ int\ antikoerper[ANTIKOERPER][LAENGE];\\
+\ \ int\ fitness[ANTIKOERPER];\\
+\ \ int\ max\underline\ fitness[WAEHLE\underline\ BESTE];\\
+\ \ int\ waehle\underline\ beste[WAEHLE\underline\ BESTE];\\
+\ \ int\ ersetze[WAEHLE\underline\ BESTE];\\
+\ \ int\ ersetze\underline\ zaehler;\\
+\ \\
+\ \ for(int\ j\ =\ 0;\ j\ <{}\ LAENGE;\ j++)\\
+\ \ \{\\
+\ \ \ \ for(int\ i\ =\ 0;\ i\ <{}\ ANTIKOERPER;\ i++)\\
+\ \ \ \ \ \ antikoerper[i][j]\ =\ rand()\%2;\\
+\ \ \ \ for(int\ i\ =\ 0;\ i\ <{}\ FREMDE\underline\ ANTIGENE;\ i++)\\
+\ \ \ \ \ \ fremde\underline\ antigene[i][j]\ =\ rand()\%2;\\
+\ \ \ \ for(int\ i\ =\ 0;\ i\ <{}\ EIGENE\underline\ ANTIGENE;\ i++)\\
+\ \ \ \ \ \ eigene\underline\ antigene[i][j]\ =\ rand()\%2;\\
+\ \ \}\\
+\ \ \\
+\ \ print\underline\ gene("{}Koerpereigene\ Antigene:\ "{},\ \&eigene\underline\ antigene[0][0],\ EIGENE\underline\ ANTIGENE,\ LAENGE);\\
+\ \ print\underline\ gene("{}Koerperfremde\ Antigene:\ "{},\ \&fremde\underline\ antigene[0][0],\ FREMDE\underline\ ANTIGENE,\ LAENGE);\\
+\ \ \\
+\ \ for(int\ d\ =\ 0;\ d\ <{}\ DURCHLAEUFE;\ d++)\\
+\ \ \{\\
+\textsl{//\ \ \ \ print\underline\ gene("{}Antikoerper:\ "{},\ \&antikoerper[0][0],\ ANTIKOERPER,\ LAENGE);}\\
+\ \ \ \ for(int\ i\ =\ 0;\ i\ <{}\ ANTIKOERPER;\ i++)\\
+\ \ \ \ \{\\
+\textsl{//\ \ \ \ \ \ printf("{}Fitness\ Antikoerper\ \%i:"{},\ i);}\\
+\ \ \ \ \ \ fitness[i]\ =\ 0;\\
+\ \ \ \ \ \ for(int\ j\ =\ 0;\ j\ <{}\ FREMDE\underline\ ANTIGENE;\ j++)\\
+\ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ int\ summe\ =\ 0;\\
+\ \ \ \ \ \ \ \ for(int\ k\ =\ 0;\ k\ <{}\ LAENGE;\ k++)\\
+\ \ \ \ \ \ \ \ \ \ summe\ +=\ fitness\underline\ funktion(antikoerper[i][k],\ fremde\underline\ antigene[j][k]);\\
+\textsl{//\ \ \ \ \ \ \ \ printf("{}\%2i"{},\ summe);}\\
+\textsl{//\ \ \ \ \ \ \ \ if(j\ !=\ FREMDE\underline\ ANTIGENE\ -{}\ 1)}\\
+\textsl{//\ \ \ \ \ \ \ \ \ \ printf("{}\ +\ "{});}\\
+\textsl{//\ \ \ \ \ \ \ \ else\ printf("{}\ =\ "{});}\\
+\ \ \ \ \ \ \ \ fitness[i]\ +=\ summe;\\
+\ \ \ \ \ \ \}\\
+\textsl{//\ \ \ \ \ \ printf("{}\%3i$\backslash$n"{},\ fitness[i]);}\\
+\ \ \ \ \ \ bool\ erkennt\underline\ selbst\ =\ false;\\
+\ \ \ \ \ \ for(int\ j\ =\ 0;\ j\ <{}\ EIGENE\underline\ ANTIGENE;\ j++)\\
+\ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ int\ n\ =\ 0;\\
+\ \ \ \ \ \ \ \ for(int\ k\ =\ 0;\ k\ <{}\ LAENGE;\ k++)\\
+\ \ \ \ \ \ \ \ \ \ n\ +=\ (fitness\underline\ funktion(antikoerper[i][k],\ eigene\underline\ antigene[j][k])\ ==\ -{}1)\ ?\ 1\ :\ 0;\\
+\ \ \ \ \ \ \ \ if(n\ ==\ LAENGE)\\
+\ \ \ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ \ \ erkennt\underline\ selbst\ =\ true;\\
+\ \ \ \ \ \ \ \ \ \ break;\\
+\ \ \ \ \ \ \ \ \}\\
+\ \ \ \ \ \ \}\\
+\ \ \ \ \ \ if(erkennt\underline\ selbst)\\
+\ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ fitness[i]\ =\ -{}9999;\\
+\textsl{//\ \ \ \ \ \ \ \ printf("{}Antikoerper\ \%i\ erkennt\ koerpereigene\ Antigene\ =>{}\ wird\ aussortiert$\backslash$n"{});}\\
+\ \ \ \ \ \ \}\\
+\ \ \ \ \}\\
+\ \\
+\ \ \ \ for(int\ i\ =\ 0;\ i\ <{}\ WAEHLE\underline\ BESTE;\ i++)\\
+\ \ \ \ \{\\
+\ \ \ \ \ \ max\underline\ fitness[i]\ =\ fitness[i];\\
+\ \ \ \ \ \ waehle\underline\ beste[i]\ =\ i;\\
+\ \ \ \ \ \ ersetze[i]\ =\ i+WAEHLE\underline\ BESTE;\\
+\ \ \ \ \}\\
+\ \ \ \ for(int\ i\ =\ WAEHLE\underline\ BESTE;\ i\ <{}\ ANTIKOERPER;\ i++)\\
+\ \ \ \ \{\\
+\ \ \ \ \ \ bool\ schon\underline\ gewaehlt\ =\ false;\\
+\ \ \ \ \ \ for(int\ j\ =\ 0;\ j\ <{}\ WAEHLE\underline\ BESTE;\ j++)\\
+\ \ \ \ \ \ \ \ if(waehle\underline\ beste[j]\ ==\ i)\\
+\ \ \ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ \ \ schon\underline\ gewaehlt\ =\ true;\\
+\ \ \ \ \ \ \ \ \ \ break;\\
+\ \ \ \ \ \ \ \ \}\\
+\ \ \ \ \ \ if(schon\underline\ gewaehlt)\\
+\ \ \ \ \ \ \ \ continue;\\
+\ \ \ \ \ \ int\ min\underline\ fitness\ =\ max\underline\ fitness[0];\\
+\ \ \ \ \ \ int\ min\ =\ 0;\\
+\ \ \ \ \ \ for(int\ j\ =\ 1;\ j\ <{}\ WAEHLE\underline\ BESTE;\ j++)\\
+\ \ \ \ \ \ \ \ if(min\underline\ fitness\ >{}\ max\underline\ fitness[j])\\
+\ \ \ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ \ \ min\underline\ fitness\ =\ max\underline\ fitness[j];\\
+\ \ \ \ \ \ \ \ \ \ min\ =\ j;\\
+\ \ \ \ \ \ \ \ \}\\
+\ \ \ \ \ \ \\
+\ \ \ \ \ \ if(min\underline\ fitness\ <{}\ fitness[i])\\
+\ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ max\underline\ fitness[min]\ =\ fitness[i];\\
+\ \ \ \ \ \ \ \ waehle\underline\ beste[min]\ =\ i;\\
+\ \ \ \ \ \ \}\\
+\ \ \ \ \}\\
+\ \ \ \ ersetze\underline\ zaehler\ =\ 0;\\
+\ \ \ \ for(int\ i\ =\ 0;\ i\ <{}\ ANTIKOERPER;\ i++)\\
+\ \ \ \ \{\\
+\ \ \ \ \ \ bool\ gewaehlt\ =\ false;\\
+\ \ \ \ \ \ for(int\ j\ =\ 0;\ j\ <{}\ WAEHLE\underline\ BESTE;\ j++)\\
+\ \ \ \ \ \ \ \ if(waehle\underline\ beste[j]\ ==\ i)\\
+\ \ \ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ \ \ gewaehlt\ =\ true;\\
+\ \ \ \ \ \ \ \ \ \ break;\\
+\ \ \ \ \ \ \ \ \}\\
+\ \ \ \ \ \ if(!gewaehlt)\\
+\ \ \ \ \ \ \{\\
+\ \ \ \ \ \ \ \ ersetze[ersetze\underline\ zaehler]\ =\ i;\\
+\ \ \ \ \ \ \ \ ersetze\underline\ zaehler++;\\
+\ \ \ \ \ \ \}\\
+\ \ \ \ \}\\
+\ \\
+\textsl{//\ \ \ \ printf("{}Waehle\ "{});}\\
+\ \ \ \ for(int\ j\ =\ 0;\ j\ <{}\ WAEHLE\underline\ BESTE;\ j++)\\
+\ \ \ \ \{\\
+\textsl{//\ \ \ \ \ \ printf("{}\%i"{},\ waehle\underline\ beste[j]);}\\
+\textsl{//\ \ \ \ \ \ if(j\ !=\ WAEHLE\underline\ BESTE\ -{}\ 1)}\\
+\textsl{//\ \ \ \ \ \ \ \ printf("{},\ "{});}\\
+\textsl{//\ \ \ \ \ \ else\ printf("{}\ und\ mutiere\ zufaellig\ an\ einer\ Stelle:$\backslash$n"{});}\\
+\ \ \ \ \ \ for(int\ k\ =\ 0;\ k\ <{}\ LAENGE;\ k++)\\
+\ \ \ \ \ \ \ \ antikoerper[ersetze[j]][k]\ ==\ antikoerper[waehle\underline\ beste[j]][k];\\
+\ \ \ \ \ \ mutiere(antikoerper[ersetze[j]],\ LAENGE);\\
+\ \ \ \ \}\\
+\ \ \ \ int\ total\ =\ 0;\\
+\ \ \ \ for(int\ i\ =\ 0;\ i\ <{}\ WAEHLE\underline\ BESTE;\ i++)\\
+\ \ \ \ \ \ total\ +=\ fitness[waehle\underline\ beste[i]];\\
+\ \ \ \ printf("{}=====>{}\ Insgesamte\ Fitness\ des\ Immunsystems:\ \%i$\backslash$n"{},\ total);\\
+\ \ \}\\
+\ \\
+\ \ \\
+\ \ return\ EXIT\underline\ SUCCESS;\\
+\}\\
+\ \\
+\ \\
+ }
+\normalfont\normalsize
+
