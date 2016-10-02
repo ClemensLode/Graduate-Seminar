@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define LAENGE 10
-#define ANTIKOERPER 4
-#define FREMDE_ANTIGENE 10
-#define EIGENE_ANTIGENE 2
-#define WAEHLE_BESTE 2
-#define DURCHLAEUFE 50
+#define LAENGE 50
+#define ANTIKOERPER 40
+#define FREMDE_ANTIGENE 100 
+#define EIGENE_ANTIGENE 10
+#define WAEHLE_BESTE 20
+#define DURCHLAEUFE 250
 			
 void print_gene(const char* string, int* array, int size, int length)
 {
@@ -24,7 +24,7 @@ void print_gene(const char* string, int* array, int size, int length)
 
 void mutiere(int* array, int length)
 {
-	for(int i = 0; i < 10; i++)
+	for(int i = 0; i < 2; i++)
 	{
 	int punktmutation = rand()%length;
 	int wert = array[punktmutation];
@@ -49,6 +49,12 @@ int fitness_funktion(int a, int b)
 		return -1;
 }
 
+void erstelle_zufaelligen_string(int* array, int length)
+{
+	for(int i = 0; i < length; i++)
+		array[i] = rand()%2;
+}
+
 int main()
 {
 	srand(time(NULL));
@@ -61,20 +67,17 @@ int main()
 	int ersetze[WAEHLE_BESTE];
 	int ersetze_zaehler;
 
-	for(int j = 0; j < LAENGE; j++)
-	{
-		for(int i = 0; i < ANTIKOERPER; i++)
-			antikoerper[i][j] = rand()%2;
-		for(int i = 0; i < FREMDE_ANTIGENE; i++)
-			fremde_antigene[i][j] = rand()%2;
-		for(int i = 0; i < EIGENE_ANTIGENE; i++)
-			eigene_antigene[i][j] = rand()%2;
-	}
+	for(int i = 0; i < ANTIKOERPER; i++)
+		erstelle_zufaelligen_string(antikoerper[i], LAENGE);
+	for(int i = 0; i < FREMDE_ANTIGENE; i++)
+		erstelle_zufaelligen_string(fremde_antigene[i], LAENGE);
+	for(int i = 0; i < EIGENE_ANTIGENE; i++)
+		erstelle_zufaelligen_string(eigene_antigene[i], LAENGE);
 	
 	print_gene("Koerpereigene Antigene: ", &eigene_antigene[0][0], EIGENE_ANTIGENE, LAENGE);
 	print_gene("Koerperfremde Antigene: ", &fremde_antigene[0][0], FREMDE_ANTIGENE, LAENGE);
 	
-	for(int d = 0; d < DURCHLAEUFE; d++)
+	for(int d = 0; d < DURCHLAEUFE*2; d++)
 	{
 //		print_gene("Antikoerper: ", &antikoerper[0][0], ANTIKOERPER, LAENGE);
 		for(int i = 0; i < ANTIKOERPER; i++)
@@ -161,6 +164,16 @@ int main()
 			}
 		}
 
+		int max = fitness[waehle_beste[0]];
+		int best = waehle_beste[0];
+		for(int j = 1; j < WAEHLE_BESTE; j++)
+			if(fitness[waehle_beste[j]] > max)
+			{
+				max = fitness[waehle_beste[j]];
+				best = waehle_beste[j];
+			}
+		
+		if(d < DURCHLAEUFE)
 //		printf("Waehle ");
 		for(int j = 0; j < WAEHLE_BESTE; j++)
 		{
@@ -172,10 +185,21 @@ int main()
 				antikoerper[ersetze[j]][k] == antikoerper[waehle_beste[j]][k];
 			mutiere(antikoerper[ersetze[j]], LAENGE);
 		}
+		else
+		{
+			for(int i = 0; i < ANTIKOERPER; i++)
+				if((i != best) || (d == DURCHLAEUFE))
+					erstelle_zufaelligen_string(antikoerper[i], LAENGE);
+		}
+		
 		int total = 0;
 		for(int i = 0; i < WAEHLE_BESTE; i++)
 			total += fitness[waehle_beste[i]];
-		printf("=====> Insgesamte Fitness des Immunsystems: %i\n", total);
+		if(d == 0)
+			printf("Immunsystem mit Immunalgorithmus:\n");
+		else if(d == DURCHLAEUFE)
+			printf("Immunsystem mit zufaelliger Suche:\n");
+		printf("=====> Fitness des Immunsystems: %i [%i]\n", total, max);
 	}
 
 	
